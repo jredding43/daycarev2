@@ -1,0 +1,75 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+publish_mode: simple
+
+collections:
+  - name: "programs"
+    label: "Programs"
+    folder: "src/content/programs"
+    create: true
+    slug: "{{slug}}"
+    format: "json"
+    editor:
+      preview: false
+    fields:
+      - { label: "Program Title", name: "title", widget: "string" }
+      - { label: "Age Range", name: "age_range", widget: "string", hint: "e.g., 0–12 months, 12–36 months, 36+ months" }
+      - { label: "Short Description", name: "description", widget: "text" }
+      - { label: "Teacher : Child Ratio", name: "ratio", widget: "string", hint: "e.g., 1:4" }
+      - { label: "Image", name: "image", widget: "image", required: false }
+
+      # Tuition section
+      - label: "Tuition (Monthly)"
+        name: "tuition"
+        widget: "object"
+        fields:
+          - { label: "Full Time", name: "full_time", widget: "number", value_type: "float", min: 0 }
+          - { label: "Part Time", name: "part_time", widget: "number", value_type: "float", required: false }
+          - { label: "Drop-in (daily)", name: "drop_in", widget: "number", value_type: "float", required: false }
+
+      # Availability section
+      - label: "Availability"
+        name: "availability"
+        widget: "object"
+        fields:
+          - { label: "Status", name: "status", widget: "select", options: ["Openings", "Waitlist", "Full"], default: "Waitlist" }
+          - { label: "Max Capacity", name: "max_capacity", widget: "number", value_type: "int", min: 0, default: 0, hint: "Maximum number of kids allowed in this program" }
+          - { label: "Kids Enrolled", name: "enrolled", widget: "number", value_type: "int", min: 0, default: 0 }
+          - { label: "Open Spots", name: "open_spots", widget: "calculated", calculate: "max_capacity - enrolled", value_type: "int", min: 0 }
+          - { label: "Next Opening", name: "next_opening", widget: "datetime", required: false, date_format: "YYYY-MM-DD", time_format: false }
+
+  # -------------------------------------
+  # Closures & Holidays (calendar list)
+  # -------------------------------------
+  - name: "closures"
+    label: "Closures & Holidays"
+    folder: "src/content/closures"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    format: "json"
+    editor: { preview: false }
+    fields:
+      - { label: "Title", name: "title", widget: "string", hint: "e.g., Labor Day" }
+      - { label: "Start Date", name: "start", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "End Date", name: "end", widget: "datetime", required: false, date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Description", name: "description", widget: "text", required: false }
+
+  # -------------------------------------
+  # Documents (handbook, supply list, etc.)
+  # -------------------------------------
+  - name: "documents"
+    label: "Documents"
+    folder: "src/content/documents"
+    create: true
+    slug: "{{slug}}"
+    format: "json"
+    editor: { preview: false }
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "File", name: "file", widget: "file" }
+      - { label: "Description", name: "description", widget: "string", required: false }
