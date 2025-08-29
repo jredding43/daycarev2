@@ -39,18 +39,18 @@ const Information: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch data from collections
+  // Fetch data from JSON files
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Fetch Programs
-        const programsResponse = await fetch("/content/programs.json");
+        const programsResponse = await fetch("/content/programs/infants.json");
         if (!programsResponse.ok) throw new Error("Programs data not found");
         const programsData = await programsResponse.json();
         setPrograms(programsData);
 
         // Fetch Closures
-        const closuresResponse = await fetch("/content/closures.json");
+        const closuresResponse = await fetch("/content/closures/2025-08-29-christmas.json");
         if (!closuresResponse.ok) throw new Error("Closures data not found");
         const closuresData = await closuresResponse.json();
         setClosures(closuresData);
