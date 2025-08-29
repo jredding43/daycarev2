@@ -1,29 +1,136 @@
-import React from "react";
-import info from "../content/information.json";
+import React, { useEffect, useState } from "react";
 
-/** Matches your legacy “Information Page” collection */
-type InfoJSON = {
-  title?: string;
-  body?: string; // plain text from CMS
+/** Types for collections */
+type Program = {
+  title: string;
+  age_range: string;
+  description: string;
+  ratio: string;
+  tuition: {
+    full_time: number;
+    part_time?: number;
+    drop_in?: number;
+  };
+  availability: {
+    status: string;
+    max_capacity: number;
+    enrolled: number;
+    open_spots: number;
+    next_opening?: string;
+  };
+};
+
+type Closure = {
+  title: string;
+  start: string; // Date
+  end?: string; // Date
+  description?: string;
+};
+
+type Document = {
+  title: string;
+  file: string; // File URL
+  description?: string;
 };
 
 const Information: React.FC = () => {
-  const data = (info ?? {}) as InfoJSON;
-  const title = typeof data.title === "string" && data.title.trim() ? data.title : "Information";
-  const body = typeof data.body === "string" ? data.body : "";
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [closures, setClosures] = useState<Closure[]>([]);
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch data from collections
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch Programs
+        const programsResponse = await fetch("/src/content/programs.json"); // Adjust path if necessary
+        const programsData = await programsResponse.json();
+        setPrograms(programsData);
+
+        // Fetch Closures
+        const closuresResponse = await fetch("/src/content/closures.json");
+        const closuresData = await closuresResponse.json();
+        setClosures(closuresData);
+
+        // Fetch Documents
+        const documentsResponse = await fetch("/src/content/documents.json");
+        const documentsData = await documentsResponse.json();
+        setDocuments(documentsData);
+      } catch (err) {
+        setError((err as Error).message || "An error occurred while fetching data.");
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <section className="mx-auto max-w-3xl px-6 py-12 text-emerald-950">
-      <h1 className="mb-6 text-center text-4xl font-extrabold tracking-tight">{title}</h1>
+    <section className="mx-auto max-w-4xl px-6 py-12 text-emerald-950">
+      <h1 className="mb-6 text-center text-4xl font-extrabold tracking-tight">Information</h1>
 
-      {body ? (
-        <div className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm">
-          {/* Preserve line breaks from CMS “plain text” */}
-          <p className="whitespace-pre-line leading-7 text-emerald-900/90">{body}</p>
-        </div>
-      ) : (
-        <p className="text-center text-emerald-900/70">No content yet. Add text in the CMS.</p>
-      )}
+      {/* Error Handling */}
+      {error && <p className="text-center text-red-500">Error: {error}</p>}
+
+      {/* Programs Section */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-4">Programs</h2>
+        {programs.length > 0 ? (
+          programs.map((program) => (
+            <div key={program.title} className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm mb-6">
+              <h3 className="text-xl font-semibold">{program.title}</h3>
+              <p className="text-sm text-emerald-800">Age Range: {program.age_range}</p>
+              <p className="text-sm text-emerald-800">Ratio: {program.ratio}</p>
+              <p className="text-sm text-emerald-800">{program.description}</p>
+              <p className="text-sm text-emerald-800">
+                Tuition: Full Time (${program.tuition.full_time}/month), Part Time (${program.tuition.part_time || "N/A"}/month), Drop-in (${program.tuition.drop_in || "N/A"}/day)
+              </p>
+              <p className="text-sm text-emerald-800">
+                Availability: {program.availability.status} (Enrolled: {program.availability.enrolled}/Max: {program.availability.max_capacity}, Open Spots: {program.availability.open_spots})
+              </p>
+              {program.availability.next_opening && <p className="text-sm text-emerald-800">Next Opening: {program.availability.next_opening}</p>}
+            </div>
+          ))
+        ) : (
+          <p>No programs available.</p>
+        )}
+      </div>
+
+      {/* Closures Section */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-4">Closures & Holidays</h2>
+        {closures.length > 0 ? (
+          closures.map((closure) => (
+            <div key={closure.title} className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm mb-6">
+              <h3 className="text-xl font-semibold">{closure.title}</h3>
+              <p className="text-sm text-emerald-800">Start: {closure.start}</p>
+              {closure.end && <p className="text-sm text-emerald-800">End: {closure.end}</p>}
+              {closure.description && <p className="text-sm text-emerald-800">{closure.description}</p>}
+            </div>
+          ))
+        ) : (
+          <p>No closures or holidays listed.</p>
+        )}
+      </div>
+
+      {/* Documents Section */}
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-4">Documents</h2>
+        {documents.length > 0 ? (
+          documents.map((document) => (
+            <div key={document.title} className="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm mb-6">
+              <h3 className="text-xl font-semibold">{document.title}</h3>
+              <p className="text-sm text-emerald-800">{document.description}</p>
+              <a href={document.file} className="text-teal-700 hover:underline" target="_blank" rel="noopener noreferrer">
+                Download Document
+              </a>
+            </div>
+          ))
+        ) : (
+          <p>No documents available.</p>
+        )}
+      </div>
     </section>
   );
 };
