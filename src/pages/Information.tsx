@@ -44,17 +44,20 @@ const Information: React.FC = () => {
     const fetchData = async () => {
       try {
         // Fetch Programs
-        const programsResponse = await fetch("/src/content/programs/programs.json"); // Adjust path if necessary
+        const programsResponse = await fetch("/content/programs.json");
+        if (!programsResponse.ok) throw new Error("Programs data not found");
         const programsData = await programsResponse.json();
         setPrograms(programsData);
 
         // Fetch Closures
-        const closuresResponse = await fetch("/src/content/closures/closures.json");
+        const closuresResponse = await fetch("/content/closures.json");
+        if (!closuresResponse.ok) throw new Error("Closures data not found");
         const closuresData = await closuresResponse.json();
         setClosures(closuresData);
 
         // Fetch Documents
-        const documentsResponse = await fetch("/src/content/documents/documents.json");
+        const documentsResponse = await fetch("/content/documents.json");
+        if (!documentsResponse.ok) throw new Error("Documents data not found");
         const documentsData = await documentsResponse.json();
         setDocuments(documentsData);
       } catch (err) {
