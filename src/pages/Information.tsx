@@ -43,34 +43,40 @@ const Information: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch Programs
+        // Fetch Programs Index
         const programsResponse = await fetch("/content/programs.json");
-        const programsList: string[] = await programsResponse.json(); 
+        if (!programsResponse.ok) throw new Error("Programs index not found");
+        const programsList: string[] = await programsResponse.json(); // Example: ["infants.json", "toddlers.json"]
         const programsData = await Promise.all(
           programsList.map(async (file) => {
             const response = await fetch(`/content/programs/${file}`);
+            if (!response.ok) throw new Error(`Failed to fetch program: ${file}`);
             return response.json();
           })
         );
         setPrograms(programsData);
 
-        // Fetch Closures
+        // Fetch Closures Index
         const closuresResponse = await fetch("/content/closures.json");
-        const closuresList: string[] = await closuresResponse.json(); 
+        if (!closuresResponse.ok) throw new Error("Closures index not found");
+        const closuresList: string[] = await closuresResponse.json(); // Example: ["2025-08-29-christmas.json", "2025-12-25-newyear.json"]
         const closuresData = await Promise.all(
           closuresList.map(async (file) => {
             const response = await fetch(`/content/closures/${file}`);
+            if (!response.ok) throw new Error(`Failed to fetch closure: ${file}`);
             return response.json();
           })
         );
         setClosures(closuresData);
 
-        // Fetch Documents
+        // Fetch Documents Index
         const documentsResponse = await fetch("/content/documents.json");
-        const documentsList: string[] = await documentsResponse.json(); 
+        if (!documentsResponse.ok) throw new Error("Documents index not found");
+        const documentsList: string[] = await documentsResponse.json(); // Example: ["parent-handbook.json", "supply-list.json"]
         const documentsData = await Promise.all(
           documentsList.map(async (file) => {
             const response = await fetch(`/content/documents/${file}`);
+            if (!response.ok) throw new Error(`Failed to fetch document: ${file}`);
             return response.json();
           })
         );
@@ -80,7 +86,6 @@ const Information: React.FC = () => {
         console.error("Error fetching data:", err);
       }
     };
-
     fetchData();
   }, []);
 
