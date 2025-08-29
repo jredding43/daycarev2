@@ -1,0 +1,16 @@
+{
+  "availability": {
+    "status": "Openings",
+    "max_capacity": 4,
+    "enrolled": 2
+  },
+  "title": "Infants",
+  "age_range": "0-12 months",
+  "description": "Testing",
+  "ratio": "1:4",
+  "tuition": {
+    "full_time": 1100,
+    "part_time": 700,
+    "drop_in": 65
+  }
+}
