@@ -44,21 +44,36 @@ const Information: React.FC = () => {
     const fetchData = async () => {
       try {
         // Fetch Programs
-        const programsResponse = await fetch("/content/programs/infants.json");
-        if (!programsResponse.ok) throw new Error("Programs data not found");
-        const programsData = await programsResponse.json();
+        const programsResponse = await fetch("/content/programs.json");
+        const programsList: string[] = await programsResponse.json(); 
+        const programsData = await Promise.all(
+          programsList.map(async (file) => {
+            const response = await fetch(`/content/programs/${file}`);
+            return response.json();
+          })
+        );
         setPrograms(programsData);
 
         // Fetch Closures
-        const closuresResponse = await fetch("/content/closures/2025-08-29-christmas.json");
-        if (!closuresResponse.ok) throw new Error("Closures data not found");
-        const closuresData = await closuresResponse.json();
+        const closuresResponse = await fetch("/content/closures.json");
+        const closuresList: string[] = await closuresResponse.json(); 
+        const closuresData = await Promise.all(
+          closuresList.map(async (file) => {
+            const response = await fetch(`/content/closures/${file}`);
+            return response.json();
+          })
+        );
         setClosures(closuresData);
 
         // Fetch Documents
         const documentsResponse = await fetch("/content/documents.json");
-        if (!documentsResponse.ok) throw new Error("Documents data not found");
-        const documentsData = await documentsResponse.json();
+        const documentsList: string[] = await documentsResponse.json(); 
+        const documentsData = await Promise.all(
+          documentsList.map(async (file) => {
+            const response = await fetch(`/content/documents/${file}`);
+            return response.json();
+          })
+        );
         setDocuments(documentsData);
       } catch (err) {
         setError((err as Error).message || "An error occurred while fetching data.");
