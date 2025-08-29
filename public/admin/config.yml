@@ -57,7 +57,7 @@ collections:
   # Documents Collection
   - name: "documents"
     label: "Documents"
-    folder: "public/content/documents" # Save documents.json file in public/content/documents
+    folder: "public/content/documents" # Save each document as a separate JSON file in public/content/documents
     create: true
     slug: "{{slug}}" # Create files with a slug based on the document title
     format: "json"
