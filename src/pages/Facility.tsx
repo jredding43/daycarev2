@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Section, Container } from "../components/Primitives";
+import FAQs from "../components/FAQs";
 
 
 const modules = import.meta.glob(
@@ -110,6 +111,7 @@ const Lightbox: React.FC<{
       window.removeEventListener("keydown", onKey);
       clearTimeout(id);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -296,6 +298,10 @@ const Facility: React.FC = () => {
           onClose={() => setLightbox(null)}
         />
       )}
+
+      <div>
+        <FAQs />
+      </div>
     </Section>
   );
 };

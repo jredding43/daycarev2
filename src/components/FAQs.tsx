@@ -24,10 +24,6 @@ const FAQs: React.FC = () => {
       "You can schedule a tour by contacting us directly or using the 'Schedule a Tour' button on our website.",
     ],
     [
-      "Do you accommodate children with special needs?",
-      "Yes, we work with families to create individualized plans to ensure all children thrive in our environment.",
-    ],
-    [
       "What is your tuition policy?",
       "Tuition is based on the age of the child and the days of attendance. Contact us for specific rates and payment options.",
     ],
