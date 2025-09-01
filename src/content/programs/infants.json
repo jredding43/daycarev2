@@ -1,0 +1,17 @@
+{
+  "availability": {
+    "status": "Openings",
+    "max_capacity": 4,
+    "enrolled": 0,
+    "open_spots": 4,
+    "next_opening": "2025-09-01"
+  },
+  "title": "Infants",
+  "age_range": "0-12",
+  "ratio": "1:4",
+  "tuition": {
+    "full_time": 1083.06,
+    "drop_in": 65
+  },
+  "description": "Now accepting Infants ages  0 - 12 months @ $49.23 / day (Full $1083.06)"
+}
