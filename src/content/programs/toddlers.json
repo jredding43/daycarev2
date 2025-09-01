@@ -12,6 +12,7 @@
   "ratio": "1:14",
   "tuition": {
     "full_time": 1083.06,
-    "drop_in": 60
+    "drop_in": 60,
+    "part_time": 30
   }
 }
