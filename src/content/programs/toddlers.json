@@ -1,0 +1,17 @@
+{
+  "availability": {
+    "status": "Openings",
+    "max_capacity": 14,
+    "enrolled": 4,
+    "open_spots": 10,
+    "next_opening": "2025-09-01"
+  },
+  "title": "Toddlers",
+  "age_range": "12 - 36 ",
+  "description": "Now accepting Toddlers ages  12 - 36 months @ $49.23 / day (Full $1083.06)\n",
+  "ratio": "1:14",
+  "tuition": {
+    "full_time": 1083.06,
+    "drop_in": 60
+  }
+}
