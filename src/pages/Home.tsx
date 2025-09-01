@@ -153,66 +153,70 @@ const Home: React.FC = () => {
 
       {/* HERO */}
       <Section aria-label="Welcome">
-        <Container className="py-12 md:py-14">
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div>
-              <nav aria-label="Highlights" className="inline-flex items-center gap-2">
-                <Chip>Early Learning Center</Chip>
-                <Chip>Afterschool Enrichment</Chip>
-                <Chip>Brightwheel Curriculum</Chip>
-              </nav>
+        <Container className="py-10 md:py-14">
+        {/* Top: badges + headline + actions */}
+        <div className="mx-auto max-w-3xl text-center">
+          <nav aria-label="Highlights" className="inline-flex flex-wrap items-center justify-center gap-2">
+            <Chip>Early Learning Center</Chip>
+            <Chip>Afterschool Enrichment</Chip>
+            <Chip>Brightwheel Curriculum</Chip>
+          </nav>
 
-              <h1 className="mt-4 text-[32px] sm:text-[40px] font-extrabold leading-tight tracking-[-0.01em]">
-                More than childcare—school-ready learning for early ages, plus afterschool.
-              </h1>
+          <h1 className="mt-4 text-[34px] sm:text-[44px] font-extrabold leading-tight tracking-[-0.01em]">
+            More than childcare—school-ready learning for early ages, plus afterschool.
+          </h1>
 
-              <p className="mt-3 text-[16px] leading-7 text-emerald-900/80 max-w-prose">
-                We're a licensed early learning center where children build strong foundations through purposeful play
-                and monthly Brightwheel themes. Families count on our calm routines during the day and our afterschool
-                homework & enrichment in the afternoons.
-              </p>
+          <p className="mx-auto mt-3 max-w-2xl text-[16px] leading-7 text-emerald-900/80">
+            We're a licensed early learning center where children build strong foundations through purposeful play and monthly
+            Brightwheel themes. Families count on our calm routines during the day and our afterschool homework & enrichment in the afternoons.
+          </p>
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Button href="/contact" aria-label="Schedule a tour via contact form">Schedule a Tour</Button>
-                <Button variant="ghost" href="tel:15096857056" aria-label="Call Jungle Kids at (509) 685-7056">
-                  Call (509) 685-7056
-                </Button>
-              </div>
-
-              {/* Quick trust bullets for LCP adjacency */}
-              <ul className="mt-6 grid grid-cols-2 gap-2 text-[13px] text-emerald-900/80">
-                <li className="flex items-center gap-2">
-                  <JungleIcon label="Low ratios"><span aria-hidden>👨‍👩‍👧</span></JungleIcon>
-                  Low teacher-child ratios
-                </li>
-                <li className="flex items-center gap-2">
-                  <JungleIcon label="Background checks"><span aria-hidden>🛡️</span></JungleIcon>
-                  Background-checked staff
-                </li>
-                <li className="flex items-center gap-2">
-                  <JungleIcon label="Parent app"><span aria-hidden>📲</span></JungleIcon>
-                  Daily updates in Brightwheel
-                </li>
-                <li className="flex items-center gap-2">
-                  <JungleIcon label="Allergy aware"><span aria-hidden>🥜</span></JungleIcon>
-                  Allergy-aware snacks
-                </li>
-              </ul>
-            </div>
-
-            <figure className="rounded overflow-hidden ring-1 ring-emerald-200 shadow-sm">
-              <img
-                src={building}
-                alt="Bright, welcoming classroom at Jungle Kids early learning center"
-                className="w-full h-full object-cover"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
-              <figcaption className="sr-only">Our facility emphasizes natural light, safety, and calm spaces.</figcaption>
-            </figure>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Button href="/contact" aria-label="Schedule a tour via contact form">Schedule a Tour</Button>
+            <Button variant="ghost" href="tel:15096857056" aria-label="Call Jungle Kids at (509) 685-7056">
+              Call (509) 685-7056
+            </Button>
           </div>
-        </Container>
+        </div>
+
+        {/* Middle: BIG image */}
+        <figure
+          className="mt-8 overflow-hidden rounded-1xl ring-1 ring-emerald-200/70 shadow-lg bg-white"
+          aria-labelledby="facility-caption"
+        >
+          <img
+            src={building}
+            alt="Front of Jungle Kids early learning center"
+            className="w-full max-h-[600px] object-contain rounded-1xl"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+          <figcaption id="facility-caption" className="sr-only">
+            Our facility emphasizes natural light, safety, and calm spaces.
+          </figcaption>
+        </figure>
+
+        {/* Bottom: quick facts grid */}
+        <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="flex items-center gap-2 rounded-xl border border-emerald-100 bg-white p-4">
+            <JungleIcon label="Low ratios"><span aria-hidden>👨‍👩‍👧</span></JungleIcon>
+            <p className="text-[13px] text-emerald-900/90">Low teacher-child ratios</p>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl border border-emerald-100 bg-white p-4">
+            <JungleIcon label="Background checks"><span aria-hidden>🛡️</span></JungleIcon>
+            <p className="text-[13px] text-emerald-900/90">Background-checked staff</p>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl border border-emerald-100 bg-white p-4">
+            <JungleIcon label="Parent app"><span aria-hidden>📲</span></JungleIcon>
+            <p className="text-[13px] text-emerald-900/90">Daily updates in Brightwheel</p>
+          </div>
+          <div className="flex items-center gap-2 rounded-xl border border-emerald-100 bg-white p-4">
+            <JungleIcon label="Allergy aware"><span aria-hidden>🥜</span></JungleIcon>
+            <p className="text-[13px] text-emerald-900/90">Allergy-aware snacks</p>
+          </div>
+        </div>
+      </Container>
 
         {/* Trust & Enrollment strip */}
         <Container className="pb-10 pt-0" aria-label="Trusted tools and enrollment">
