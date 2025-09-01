@@ -1,23 +1,49 @@
-import { readdir, writeFile } from "fs/promises";
+// scripts/build-content-index.mjs
+import { mkdir, readdir, copyFile, writeFile } from "fs/promises";
 import { join } from "path";
 
-const ROOT = "public/content";
-const buckets = ["programs", "closures", "documents", "information"]; 
+const SRC_ROOT = "src/content";
+const PUB_ROOT = "public/content";
+const BUCKETS = ["programs", "closures", "documents", "information"];
 
-const main = async () => {
-  for (const b of buckets) {
-    const dir = join(ROOT, b);
-    let files = [];
-    try {
-      files = (await readdir(dir)).filter(f => f.endsWith(".json")).sort();
-    } catch {
-      files = [];
-    }
-    await writeFile(join(ROOT, `${b}.json`), JSON.stringify(files, null, 2));
+async function ensureDir(dir) {
+  await mkdir(dir, { recursive: true });
+}
+
+async function buildBucket(bucket) {
+  const srcDir = join(SRC_ROOT, bucket);
+  const pubDir = join(PUB_ROOT, bucket);
+
+  // Ensure destination dirs exist
+  await ensureDir(PUB_ROOT);
+  await ensureDir(pubDir);
+
+  let files = [];
+  try {
+    // list all .json files in src bucket
+    files = (await readdir(srcDir)).filter((f) => f.toLowerCase().endsWith(".json")).sort();
+  } catch {
+    // if the folder doesn't exist yet, treat as empty
+    files = [];
   }
-};
 
-main().catch(err => {
-  console.error(err);
+  // Copy each JSON file to public/content/<bucket>/<file>
+  for (const f of files) {
+    await copyFile(join(srcDir, f), join(pubDir, f));
+  }
+
+  // Write index file in public/content/<bucket>.json
+  await writeFile(join(PUB_ROOT, `${bucket}.json`), JSON.stringify(files, null, 2));
+  console.log(`✓ ${bucket}: ${files.length} items, index written`);
+}
+
+async function main() {
+  for (const b of BUCKETS) {
+    await buildBucket(b);
+  }
+}
+
+main().catch((err) => {
+  console.error("build-content-index failed:", err);
   process.exit(1);
 });
