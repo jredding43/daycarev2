@@ -2,8 +2,8 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: "public/uploads" # Where uploaded media files will be stored
-public_folder: "/uploads"     # Public URL for accessing uploaded media files
+media_folder: "public/uploads"   # uploaded assets go to /public
+public_folder: "/uploads"
 
 publish_mode: simple
 
@@ -11,9 +11,9 @@ collections:
   # Programs Collection
   - name: "programs"
     label: "Programs"
-    folder: "public/content/programs" # Save each program as a separate JSON file in public/content/programs
+    folder: "src/content/programs"
     create: true
-    slug: "{{slug}}" # Create files with a slug based on the program title
+    slug: "{{slug}}"
     format: "json"
     editor:
       preview: false
@@ -26,7 +26,7 @@ collections:
         name: "tuition"
         widget: "object"
         fields:
-          - { label: "Full Time", name: "full_time", widget: "number", value_type: "float", min: 0 }`
+          - { label: "Full Time", name: "full_time", widget: "number", value_type: "float", min: 0 }
           - { label: "Part Time", name: "part_time", widget: "number", value_type: "float", required: false }
           - { label: "Drop-in (daily)", name: "drop_in", widget: "number", value_type: "float", required: false }
       - label: "Availability"
@@ -36,15 +36,16 @@ collections:
           - { label: "Status", name: "status", widget: "select", options: ["Openings", "Waitlist", "Full"], default: "Waitlist" }
           - { label: "Max Capacity", name: "max_capacity", widget: "number", value_type: "int", min: 0, default: 0, hint: "Maximum number of kids allowed in this program" }
           - { label: "Kids Enrolled", name: "enrolled", widget: "number", value_type: "int", min: 0, default: 0 }
-          - { label: "Open Spots", name: "open_spots", widget: "calculated", calculate: "max_capacity - enrolled", value_type: "int", min: 0 }
+          # CMS can't compute fields; keep optional. UI will compute if omitted.
+          - { label: "Open Spots (optional)", name: "open_spots", widget: "number", value_type: "int", required: false, min: 0 }
           - { label: "Next Opening", name: "next_opening", widget: "datetime", required: false, date_format: "YYYY-MM-DD", time_format: false }
 
   # Closures Collection
   - name: "closures"
     label: "Closures & Holidays"
-    folder: "public/content/closures" # Save each closure as a separate JSON file in public/content/closures
+    folder: "src/content/closures"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}" # Use date-based slugs for closures
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     format: "json"
     editor:
       preview: false
@@ -57,9 +58,9 @@ collections:
   # Documents Collection
   - name: "documents"
     label: "Documents"
-    folder: "public/content/documents" # Save each document as a separate JSON file in public/content/documents
+    folder: "src/content/documents"
     create: true
-    slug: "{{slug}}" # Create files with a slug based on the document title
+    slug: "{{slug}}"
     format: "json"
     editor:
       preview: false
@@ -71,9 +72,9 @@ collections:
   # Information Collection
   - name: "information"
     label: "Bulletin Board"
-    folder: "public/content/information" # Save each document as a separate JSON file in public/content/documents
+    folder: "src/content/information"
     create: true
-    slug: "{{slug}}" # Create files with a slug based on the document title
+    slug: "{{slug}}"
     format: "json"
     editor:
       preview: false
