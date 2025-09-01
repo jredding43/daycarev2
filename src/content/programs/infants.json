@@ -11,7 +11,8 @@
   "ratio": "1:4",
   "tuition": {
     "full_time": 1083.06,
-    "drop_in": 65
+    "drop_in": 60,
+    "part_time": 30
   },
-  "description": "Now accepting Infants ages  0 - 12 months @ $49.23 / day (Full $1083.06)"
+  "description": "Now accepting Infants ages  0 - 12 months @ $49.23 / day (Full $1083.06)\n"
 }
