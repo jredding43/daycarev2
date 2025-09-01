@@ -19,14 +19,14 @@ collections:
       preview: false
     fields:
       - { label: "Program Title", name: "title", widget: "string" }
-      - { label: "Age Range", name: "age_range", widget: "string", hint: "e.g., 0–12 months, 12–36 months, 36+ months" }
+      - { label: "Age Range", name: "age_range", widget: "string", hint: "e.g., 0-12 months, 12-36 months, 36+ months" }
       - { label: "Short Description", name: "description", widget: "text" }
       - { label: "Teacher : Child Ratio", name: "ratio", widget: "string", hint: "e.g., 1:4" }
       - label: "Tuition (Monthly)"
         name: "tuition"
         widget: "object"
         fields:
-          - { label: "Full Time", name: "full_time", widget: "number", value_type: "float", min: 0 }
+          - { label: "Full Time", name: "full_time", widget: "number", value_type: "float", min: 0 }`
           - { label: "Part Time", name: "part_time", widget: "number", value_type: "float", required: false }
           - { label: "Drop-in (daily)", name: "drop_in", widget: "number", value_type: "float", required: false }
       - label: "Availability"
@@ -66,4 +66,17 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "File", name: "file", widget: "file" }
+      - { label: "Description", name: "description", widget: "string", required: false }
+
+  # Information Collection
+  - name: "information"
+    label: "Bulletin Board"
+    folder: "public/content/information" # Save each document as a separate JSON file in public/content/documents
+    create: true
+    slug: "{{slug}}" # Create files with a slug based on the document title
+    format: "json"
+    editor:
+      preview: false
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "string", required: false }
