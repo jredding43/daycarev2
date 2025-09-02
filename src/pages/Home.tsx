@@ -415,9 +415,12 @@ const Home: React.FC = () => {
               { time: "10:30", title: "Math", note: "Hands-on counting, shapes, and number games.", icon: "🔢" },
               { time: "11:00", title: "Outside Play", note: "More movement and social play outdoors.", icon: "🌳" },
               { time: "11:30", title: "Lunch", note: "Wash up, eat balanced meal together.", icon: "🥗" },
-              { time: "12:30–1:00", title: "Quiet / Nap Time", note: "Rest, nap, or quiet activities.", icon: "😴" },
-              { time: "1:00", title: "Art & Craft", note: "Creative projects and hands-on making.", icon: "🎨" },
-              { time: "2:00", title: "Outside Play", note: "Wrap up the day with outdoor fun.", icon: "☀️" },
+              { time: "12:30-1:00", title: "Quiet / Nap Time", note: "Rest, nap, or quiet activities.", icon: "😴" },
+              { time: "1:00 - 2:00", title: "Quiet / Nap Time", note: "Rest, nap, or quiet activities.", icon: "🎨" },
+              { time: "3:00", title: "Snack", note: "Wash hands, enjoy a healthy snack.", icon: "🍎" },
+              { time: "3:30", title: "Free Choice", note: "Free choice or inside play", icon: "🛝" },
+              { time: "4:30 - 5:00", title: "Free Choice", note: "Science, outside play, or video learning.", icon: "🔢" },
+              { time: "5:30 - 6:00", title: "End of Day", note: "Clean up and get ready for home.", icon: "🔢" },
             ].map(({ time, title, note, icon }) => (
               <li key={time} className="group">
                 <article className="flex items-start gap-4 p-4 sm:p-5 hover:bg-emerald-50/40">
