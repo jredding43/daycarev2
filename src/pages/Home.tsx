@@ -415,7 +415,6 @@ const Home: React.FC = () => {
               { time: "10:30", title: "Math", note: "Hands-on counting, shapes, and number games.", icon: "🔢" },
               { time: "11:00", title: "Outside Play", note: "More movement and social play outdoors.", icon: "🌳" },
               { time: "11:30", title: "Lunch", note: "Wash up, eat balanced meal together.", icon: "🥗" },
-              { time: "12:30-1:00", title: "Quiet / Nap Time", note: "Rest, nap, or quiet activities.", icon: "😴" },
               { time: "1:00 - 2:00", title: "Quiet / Nap Time", note: "Rest, nap, or quiet activities.", icon: "🎨" },
               { time: "3:00", title: "Snack", note: "Wash hands, enjoy a healthy snack.", icon: "🍎" },
               { time: "3:30", title: "Free Choice", note: "Free choice or inside play", icon: "🛝" },
