@@ -1,0 +1,18 @@
+{
+  "availability": {
+    "status": "Openings",
+    "max_capacity": 9,
+    "enrolled": 4,
+    "open_spots": 4,
+    "next_opening": "2025-09-01"
+  },
+  "title": "Kids",
+  "age_range": "1st - 12-1/2 y/o",
+  "description": "Now accepting Kids ages  1st Grade - 12-1/2 years old @ $36.59 / day\n\nFull @ $804.98\nPart Time @ $30 per day (4 hour)\nDrop In @ 60 Per day\n\n",
+  "ratio": "1:9",
+  "tuition": {
+    "full_time": 804.98,
+    "part_time": 30,
+    "drop_in": 60
+  }
+}
