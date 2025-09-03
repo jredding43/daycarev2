@@ -6,7 +6,8 @@ import FAQs from "../components/FAQs";
 /* =========================
    Config
    ========================= */
-const FORMSPREE_ID = "YOUR_FORMSPREE_ID"; // ← replace me
+// Use ONLY the short ID here (not the full URL)
+const FORMSPREE_ID = "xldwogev";
 const FORMSPREE_URL = `https://formspree.io/f/${FORMSPREE_ID}`;
 
 const ORG = {
@@ -67,27 +68,28 @@ const Contact: React.FC = () => {
     setSent(null);
 
     try {
+      // Formspree JSON payload — keep "email" field for reply-to
       const payload = {
         name: form.name,
-        email: form.email,   // Formspree uses "email" to set reply-to
+        email: form.email,
         phone: form.phone,
         topic: form.topic,
         message: form.message,
-        pageUrl: window.location.href,
+        pageUrl: typeof window !== "undefined" ? window.location.href : "",
         _subject: `[${form.topic}] ${form.name} — Website Contact`,
       };
 
       const res = await fetch(FORMSPREE_URL, {
         method: "POST",
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
 
       if (res.ok) {
-        setSent("ok");
+        setSent("ok"); // on-page confirmation
         setForm({
           name: "",
           email: "",
@@ -96,9 +98,7 @@ const Contact: React.FC = () => {
           message: "",
           _gotcha: "",
         });
-      } else {
-        setSent("err");
-      }
+      } 
     } catch {
       setSent("err");
     } finally {
@@ -224,7 +224,7 @@ const Contact: React.FC = () => {
               </div>
             </div>
 
-            {/* Form (Formspree) */}
+            {/* Form (Formspree via JSON; no redirects) */}
             <Card>
               <form onSubmit={handleSubmit} className="grid gap-4" noValidate>
                 {/* Honey pot for bots */}
@@ -345,11 +345,9 @@ const Contact: React.FC = () => {
         </Container>
       </div>
 
-    {/* FAQs */}
-    <FAQs />
+      {/* FAQs */}
+      <FAQs />
     </Section>
-
-    
   );
 };
 

@@ -56,6 +56,18 @@ const STAFF: Staff[] = [
     bio: "Helps across classrooms; maintains clean, safe environments.",
     badges: ["Background-checked", "CPR/First Aid"],
   },
+  {
+    name: "Brianya Hads",
+    role: "Support Staff",
+    bio: "Helps across classrooms; maintains clean, safe environments.",
+    badges: ["Background-checked", "CPR/First Aid"],
+  },
+  {
+    name: "Stacey Hotchkiss",
+    role: "Support Staff",
+    bio: "Helps across classrooms; maintains clean, safe environments.",
+    badges: ["Background-checked", "CPR/First Aid"],
+  },
 ];
 
 const initials = (name: string) =>
