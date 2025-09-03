@@ -39,7 +39,7 @@ const STAFF: Staff[] = [
     badges: ["CPR/First Aid", "ECE Certified", "CDA", "5+ yrs exp."],
   },
   {
-    name: "Dawn",
+    name: "Dawn House",
     role: "Infant/Toddler",
     bio: "Supports small groups, centers, and outdoor play with patience and warmth.",
     badges: ["CPR/First Aid", "5+ yrs exp"],
@@ -51,7 +51,7 @@ const STAFF: Staff[] = [
     badges: ["CPR/First Aid", "5+ yrs exp"],
   },
   {
-    name: "Pamala",
+    name: "Pamala Hansen",
     role: "Support Staff",
     bio: "Helps across classrooms; maintains clean, safe environments.",
     badges: ["Background-checked", "CPR/First Aid"],

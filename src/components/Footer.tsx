@@ -87,15 +87,6 @@ const Footer: React.FC = () => (
                 (509) 685-7056
               </a>
             </li>
-            <li>
-              📧{" "}
-              <a
-                className="underline-offset-4 hover:underline"
-                href="mailto:Junglekidsearlylearning@gmail.com"
-              >
-                Junglekidsearlylearning@gmail.com
-              </a>
-            </li>
           </ul>
         </div>
 

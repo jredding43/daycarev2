@@ -14,7 +14,6 @@ const ORG = {
   name: "Jungle Kids Early Learning",
   phoneDisplay: "(509) 685-7056",
   phoneTel: "15096857056",
-  email: "Junglekidsearlylearning@gmail.com",
   addressLine: "282 W 1st Ave, Colville, WA 99114",
   mapsQuery:
     "https://www.google.com/maps/search/?api=1&query=282+W+1st+Ave,+Colville,+WA+99114",
@@ -167,23 +166,7 @@ const Contact: React.FC = () => {
                   </div>
                 </Card>
 
-                <Card className="flex items-start gap-3">
-                  <div className="text-xl" aria-hidden></div>
-                  <div className="min-w-0">
-                    <div className="text-sm font-semibold text-slate-900">Email</div>
-                    <a href={`mailto:${ORG.email}`} className="text-sm text-teal-700 underline-offset-4 hover:underline">
-                      {ORG.email}
-                    </a>
-                    <div className="mt-1">
-                      <button
-                        onClick={() => copy(ORG.email, "Email copied")}
-                        className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
-                      >
-                        Copy
-                      </button>
-                    </div>
-                  </div>
-                </Card>
+          
 
                 <Card className="sm:col-span-2">
                   <div className="flex items-start gap-3">
