@@ -12,6 +12,7 @@ const ORG = {
   address: "282 W 1st Ave, Colville, WA 99114",
   hours: "Mon-Fri · 6:00 AM - 6:00 PM",
   facebookUrl: "https://www.facebook.com/61573180175113",
+  siteUrl: "https://junglekidsearlylearning.com/",
 };
 
 /* =========================
@@ -21,7 +22,7 @@ type Staff = {
   name: string;
   role: string;
   bio: string;
-  badges: string[];
+  badges: string[]; // kept for data continuity (not rendered below)
   photo?: string;
 };
 
@@ -70,6 +71,23 @@ const STAFF: Staff[] = [
   },
 ];
 
+// Shared team credentials shown once above the staff section
+const TEAM_CREDENTIALS: string[] = [
+  "High school diploma or GED",
+  "STARS training — 30-hour initial; 10-hour annual",
+  "Food handler card",
+  "Bloodborne pathogens",
+  "Infant/Child CPR & First Aid",
+  "Safe sleep training",
+  "Background check & fingerprinting",
+  "Medication management",
+  "Cavity Kids training",
+  "MMR immunization",
+  "TB test",
+  "CDA (Initial + continuing education)",
+  "Hands-on training with children",
+];
+
 const initials = (name: string) =>
   name
     .split(" ")
@@ -79,11 +97,7 @@ const initials = (name: string) =>
     .join("")
     .toUpperCase();
 
-const Badge: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-2.5 py-0.5 text-xs text-slate-700">
-    {children}
-  </span>
-);
+
 
 const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <span className="inline-flex items-center rounded border border-slate-200 bg-white px-2.5 py-0.5 text-xs font-medium text-slate-700">
@@ -97,7 +111,6 @@ const Bullet: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <span>{children}</span>
   </li>
 );
-
 
 /* =========================
    Page
@@ -113,6 +126,7 @@ const About: React.FC = () => {
             "@context": "https://schema.org",
             "@type": "ChildCare",
             name: ORG.name,
+            url: ORG.siteUrl,
             telephone: `+1-${ORG.phoneTel}`,
             address: {
               "@type": "PostalAddress",
@@ -124,6 +138,7 @@ const About: React.FC = () => {
             },
             openingHours: "Mo-Fr 06:00-18:00",
             sameAs: [ORG.facebookUrl],
+            slogan: "Calm structure, playful learning.",
           }),
         }}
       />
@@ -146,7 +161,7 @@ const About: React.FC = () => {
               <div className="mt-5 flex flex-wrap items-center gap-2">
                 <Pill>Licensed & background-checked staff</Pill>
                 <Pill>Play-based + developmentally appropriate</Pill>
-                <Pill>Family communication</Pill>
+                <Pill>Family communication via brightwheel</Pill>
               </div>
 
               <div className="mt-6 flex flex-wrap gap-3">
@@ -190,7 +205,7 @@ const About: React.FC = () => {
               value: ORG.address,
               href: "https://www.google.com/maps/search/?api=1&query=282+W+1st+Ave,+Colville,+WA+99114",
             },
-            { label: "Family App", value: "Brightwheel", href: "https://mybrightwheel.com/" },
+            { label: "Family App", value: "brightwheel", href: "https://mybrightwheel.com/" },
           ].map((fact) => (
             <Card key={fact.label} className="flex flex-col gap-1">
               <div className="text-xs uppercase tracking-wide text-slate-500">{fact.label}</div>
@@ -232,12 +247,12 @@ const About: React.FC = () => {
             <h2 className="text-xl font-semibold text-slate-900">Curriculum Pillars</h2>
             <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {[
-                ["📚 Literacy", "Storytime, songs, print-rich spaces"],
-                ["🔬 STEAM", "Hands-on science, math, and building"],
-                ["🎨 Art", "Open-ended, process-focused creativity"],
-                ["🎵 Music & Movement", "Rhythm, coordination, and joy"],
-                ["🧠 SEL", "Feelings, friendships, problem-solving"],
-                ["🌿 Outdoor Play", "Gross motor skills & fresh air"],
+                ["Literacy", "Storytime, songs, print-rich spaces"],
+                ["STEAM", "Hands-on science, math, and building"],
+                ["Art", "Open-ended, process-focused creativity"],
+                ["Music & Movement", "Rhythm, coordination, and joy"],
+                ["Social-Emotional Learning", "Feelings, friendships, problem-solving"],
+                ["Outdoor Play", "Gross motor skills & fresh air"],
               ].map(([title, desc]) => (
                 <div
                   key={title as string}
@@ -252,35 +267,54 @@ const About: React.FC = () => {
         </div>
       </Container>
 
-      {/* Safety & Licensing + Daily Rhythm (matches Home list view) */}
+      {/* Safety & Licensing + Brightwheel */}
       <Container className="py-8">
         <div className="grid gap-6 lg:grid-cols-2">
           <Card>
             <h2 className="text-xl font-semibold text-slate-900">Safety & Licensing</h2>
             <ul className="mt-3 space-y-2 text-sm text-slate-700">
-              <Bullet>Licensed childcare center; staff are background-checked.</Bullet>
+              <Bullet>Licensed early learning center; staff are background-checked.</Bullet>
               <Bullet>Daily health checks, secure entry, and sign-in/out procedures.</Bullet>
-              <Bullet>CPR/First Aid trained staff; regular safety drills.</Bullet>
-              <Bullet>Cleanliness standards and toy/equipment sanitization routines.</Bullet>
-              <Bullet>Allergies noted; we work with families on care plans.</Bullet>
+              <Bullet>CPR/First Aid-trained staff; regular safety drills.</Bullet>
+              <Bullet>Cleanliness standards and sanitization routines for toys/equipment.</Bullet>
+              <Bullet>Allergies noted; we collaborate with families on care plans.</Bullet>
             </ul>
           </Card>
 
           <Card>
-            <div className="">
-              <h2 className="text-xl font-semibold text-slate-900">More than Daycare</h2>
-              <p className="mt-2 text-sm text-slate-700">
-                Jungle Kids is an <span className="font-semibold">early learning institution</span>, designed to
-                nurture children from infancy through transitional kindergarten and into afterschool enrichment.
-                We go beyond care—building strong foundations in literacy, math, science, and social-emotional
-                learning. Our program blends structured academics with play-based exploration, preparing children
-                for kindergarten and supporting school-age learners with homework help, clubs, and creative
-                projects.
-              </p>
+            <h2 className="text-xl font-semibold text-slate-900">Curriculum & Family Communication</h2>
+            <p className="mt-2 text-sm text-slate-700">
+              We use the <span className="font-semibold">brightwheel</span> app to plan curriculum and keep families
+              connected. Daily reports, learning observations, photos, and messaging make it easy to
+              follow your child’s day and partner with teachers.
+            </p>
+            <div className="mt-3">
+              <a
+                href="https://mybrightwheel.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm font-semibold text-teal-700 underline decoration-teal-200 underline-offset-4 hover:decoration-teal-400"
+              >
+                Learn about brightwheel
+              </a>
             </div>
-
           </Card>
         </div>
+      </Container>
+
+      {/* NEW: Team Credentials & Training */}
+      <Container className="py-10">
+        <Card>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Team Credentials & Training</h2>
+          <p className="mt-2 text-sm text-slate-700">
+            Our educators maintain active certifications and ongoing professional development to ensure a safe, high-quality early learning environment.
+          </p>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {TEAM_CREDENTIALS.map((item) => (
+              <Bullet key={item}>{item}</Bullet>
+            ))}
+          </ul>
+        </Card>
       </Container>
 
       {/* Meet the Staff */}
@@ -327,11 +361,12 @@ const About: React.FC = () => {
 
                   <p className="mt-3 text-sm text-slate-700">{s.bio}</p>
 
-                  <div className="mt-4 flex flex-wrap gap-2">
+                  {/* badges removed so we don’t duplicate credentials */}
+                  {/* <div className="mt-4 flex flex-wrap gap-2">
                     {s.badges.map((b) => (
                       <Badge key={b}>{b}</Badge>
                     ))}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </Card>
