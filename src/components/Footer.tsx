@@ -91,9 +91,9 @@ const Footer: React.FC = () => (
               📧{" "}
               <a
                 className="underline-offset-4 hover:underline"
-                href="mailto:junglekids@email.com"
+                href="mailto:Junglekidsearlylearning@gmail.com"
               >
-                junglekids@email.com
+                Junglekidsearlylearning@gmail.com
               </a>
             </li>
           </ul>

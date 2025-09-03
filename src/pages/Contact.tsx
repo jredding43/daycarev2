@@ -13,7 +13,7 @@ const ORG = {
   name: "Jungle Kids Early Learning",
   phoneDisplay: "(509) 685-7056",
   phoneTel: "15096857056",
-  email: "junglekids@email.com",
+  email: "Junglekidsearlylearning@gmail.com",
   addressLine: "282 W 1st Ave, Colville, WA 99114",
   mapsQuery:
     "https://www.google.com/maps/search/?api=1&query=282+W+1st+Ave,+Colville,+WA+99114",
@@ -150,7 +150,7 @@ const Contact: React.FC = () => {
               {/* Contact cards */}
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Card className="flex items-start gap-3">
-                  <div className="text-xl" aria-hidden>📞</div>
+                  <div className="text-xl" aria-hidden></div>
                   <div className="min-w-0">
                     <div className="text-sm font-semibold text-slate-900">Phone</div>
                     <a href={`tel:${ORG.phoneTel}`} className="text-sm text-teal-700 underline-offset-4 hover:underline">
@@ -168,7 +168,7 @@ const Contact: React.FC = () => {
                 </Card>
 
                 <Card className="flex items-start gap-3">
-                  <div className="text-xl" aria-hidden>📧</div>
+                  <div className="text-xl" aria-hidden></div>
                   <div className="min-w-0">
                     <div className="text-sm font-semibold text-slate-900">Email</div>
                     <a href={`mailto:${ORG.email}`} className="text-sm text-teal-700 underline-offset-4 hover:underline">
