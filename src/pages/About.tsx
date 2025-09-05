@@ -5,6 +5,16 @@ import { Section, Container, Card } from "../components/Primitives";
 import class1 from "../assets/class1.jpg";
 import FAQs from "../components/FAQs";
 
+import penny from "../assets/pictures/staff/penny.jpg";
+import brittney from "../assets/pictures/staff/britney.jpg";
+import dawn from "../assets/pictures/staff/dawn.jpg";
+import alee from "../assets/pictures/staff/alee.jpg";
+import pam from "../assets/pictures/staff/pam.jpg";
+import brianya from "../assets/pictures/staff/brianya.jpg";
+import stacey from "../assets/pictures/staff/stacey.jpg";
+import vol1 from "../assets/pictures/staff/vol1.jpg";
+import vol2 from "../assets/pictures/staff/vol2.jpg";
+
 const ORG = {
   name: "Jungle Kids Early Learning",
   phoneDisplay: "(509) 685-7056",
@@ -32,42 +42,63 @@ const STAFF: Staff[] = [
     role: "Owner",
     bio: "Leads our team and family partnerships; 20+ years in early childhood leadership.",
     badges: ["CPR/First Aid", "ECE Admin", "Background-checked"],
+    photo: penny,
   },
   {
     name: "Brittney Lorelle ",
     role: "Infant/Toddler",
     bio: "Play-based literacy, emergent curriculum, and joyful classroom rituals.",
     badges: ["CPR/First Aid", "ECE Certified", "CDA", "5+ yrs exp."],
+    photo: brittney,
   },
   {
     name: "Dawn House",
     role: "Infant/Toddler",
     bio: "Supports small groups, centers, and outdoor play with patience and warmth.",
     badges: ["CPR/First Aid", "5+ yrs exp"],
+    photo: dawn,
   },
   {
     name: "Alee Sloan",
     role: "Infant/Toddler",
     bio: "Attachment-focused care with responsive routines and sensory exploration.",
     badges: ["CPR/First Aid", "5+ yrs exp"],
+    photo: alee,
   },
   {
     name: "Pamala Hansen",
     role: "Support Staff",
     bio: "Helps across classrooms; maintains clean, safe environments.",
     badges: ["Background-checked", "CPR/First Aid"],
+    photo: pam,
   },
   {
     name: "Brianya Hads",
     role: "Support Staff",
     bio: "Helps across classrooms; maintains clean, safe environments.",
     badges: ["Background-checked", "CPR/First Aid"],
+    photo: brianya,
   },
   {
     name: "Stacey Hotchkiss",
     role: "Support Staff",
     bio: "Helps across classrooms; maintains clean, safe environments.",
     badges: ["Background-checked", "CPR/First Aid"],
+    photo: stacey,
+  },
+  {
+    name: "",
+    role: "Volunteer",
+    bio: "Helps across classrooms; maintains clean, safe environments.",
+    badges: ["Background-checked", "CPR/First Aid"],
+    photo: vol1,
+  },
+  {
+    name: "",
+    role: "Volunteer",
+    bio: "Helps across classrooms; maintains clean, safe environments.",
+    badges: ["Background-checked", "CPR/First Aid"],
+    photo: vol2,
   },
 ];
 
@@ -188,6 +219,8 @@ const About: React.FC = () => {
                 className="h-full w-full object-cover"
                 loading="lazy"
                 decoding="async"
+                width={512}
+                height={640}
               />
             </div>
           </div>
