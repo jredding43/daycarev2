@@ -367,21 +367,24 @@ const About: React.FC = () => {
             <Card key={s.name} className="overflow-hidden p-0">
               <div className="flex flex-col sm:flex-row">
                 {/* Photo / Initials */}
-                <div className="relative w-full sm:w-56 md:w-64 flex-shrink-0">
+                <div className="relative w-full aspect-[4/5] sm:w-56 md:w-64 sm:aspect-auto flex-shrink-0">
                   {s.photo ? (
                     <img
                       src={s.photo}
                       alt={`${s.name}, ${s.role}`}
-                      className="h-56 w-full sm:h-full object-cover"
+                      className="absolute inset-0 h-full w-full object-cover object-[50%_20%]" // or object-top
                       loading="lazy"
                       decoding="async"
+                      width={512}
+                      height={640}
                     />
                   ) : (
-                    <div className="flex h-56 w-full items-center justify-center bg-slate-100 text-4xl font-semibold text-slate-500 sm:h-full sm:w-56 md:w-64">
+                    <div className="absolute inset-0 flex items-center justify-center bg-slate-100 text-4xl font-semibold text-slate-500">
                       {initials(s.name)}
                     </div>
                   )}
                 </div>
+
 
                 {/* Details */}
                 <div className="flex-1 p-4 sm:p-6">
