@@ -87,14 +87,14 @@ const STAFF: Staff[] = [
     photo: stacey,
   },
   {
-    name: "",
+    name: "..",
     role: "Volunteer",
     bio: "Helps across classrooms; maintains clean, safe environments.",
     badges: ["Background-checked", "CPR/First Aid"],
     photo: vol1,
   },
   {
-    name: "",
+    name: "...",
     role: "Volunteer",
     bio: "Helps across classrooms; maintains clean, safe environments.",
     badges: ["Background-checked", "CPR/First Aid"],
