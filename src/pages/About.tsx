@@ -1,20 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Section, Container, Card } from "../components/Primitives";
 
 import class1 from "../assets/class1.jpg";
 import FAQs from "../components/FAQs";
 
-import penny from "../assets/pictures/staff/penny.jpg";
-import brittney from "../assets/pictures/staff/britney.jpg";
-import dawn from "../assets/pictures/staff/dawn.jpg";
-import alee from "../assets/pictures/staff/alee.jpg";
-import pam from "../assets/pictures/staff/pam.jpg";
-import brianya from "../assets/pictures/staff/brianya.jpg";
-import stacey from "../assets/pictures/staff/stacey.jpg";
-import vol1 from "../assets/pictures/staff/vol1.jpg";
-import vol2 from "../assets/pictures/staff/vol2.jpg";
-
+/* =========================
+   Org
+   ========================= */
 const ORG = {
   name: "Jungle Kids Early Learning",
   phoneDisplay: "(509) 685-7056",
@@ -26,83 +19,42 @@ const ORG = {
 };
 
 /* =========================
-   Staff
+   Types & helpers
    ========================= */
 type Staff = {
   name: string;
   role: string;
   bio: string;
-  badges: string[]; // kept for data continuity (not rendered below)
-  photo?: string;
+  badges?: string[]; // kept for data continuity (not rendered below)
+  photo?: string;    // e.g. "/uploads/jane.jpg"
+  order?: number;    // for manual sorting in CMS
 };
 
-const STAFF: Staff[] = [
-  {
-    name: "Penny Pittman",
-    role: "Owner",
-    bio: "Leads our team and family partnerships; 20+ years in early childhood leadership.",
-    badges: ["CPR/First Aid", "ECE Admin", "Background-checked"],
-    photo: penny,
-  },
-  {
-    name: "Brittney Lorelle ",
-    role: "Infant/Toddler",
-    bio: "Play-based literacy, emergent curriculum, and joyful classroom rituals.",
-    badges: ["CPR/First Aid", "ECE Certified", "CDA", "5+ yrs exp."],
-    photo: brittney,
-  },
-  {
-    name: "Dawn House",
-    role: "Infant/Toddler",
-    bio: "Supports small groups, centers, and outdoor play with patience and warmth.",
-    badges: ["CPR/First Aid", "5+ yrs exp"],
-    photo: dawn,
-  },
-  {
-    name: "Alee Sloan",
-    role: "Infant/Toddler",
-    bio: "Attachment-focused care with responsive routines and sensory exploration.",
-    badges: ["CPR/First Aid", "5+ yrs exp"],
-    photo: alee,
-  },
-  {
-    name: "Pamala Hansen",
-    role: "Support Staff",
-    bio: "Helps across classrooms; maintains clean, safe environments.",
-    badges: ["Background-checked", "CPR/First Aid"],
-    photo: pam,
-  },
-  {
-    name: "Brianya Hads",
-    role: "Support Staff",
-    bio: "Helps across classrooms; maintains clean, safe environments.",
-    badges: ["Background-checked", "CPR/First Aid"],
-    photo: brianya,
-  },
-  {
-    name: "Stacey Hotchkiss",
-    role: "Support Staff",
-    bio: "Helps across classrooms; maintains clean, safe environments.",
-    badges: ["Background-checked", "CPR/First Aid"],
-    photo: stacey,
-  },
-  {
-    name: "..",
-    role: "Volunteer",
-    bio: "Helps across classrooms; maintains clean, safe environments.",
-    badges: ["Background-checked", "CPR/First Aid"],
-    photo: vol1,
-  },
-  {
-    name: "...",
-    role: "Volunteer",
-    bio: "Helps across classrooms; maintains clean, safe environments.",
-    badges: ["Background-checked", "CPR/First Aid"],
-    photo: vol2,
-  },
-];
+const initials = (name: string) =>
+  name
+    .split(" ")
+    .map((n) => n[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 
-// Shared team credentials shown once above the staff section
+const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <span className="inline-flex items-center rounded border border-slate-200 bg-white px-2.5 py-0.5 text-xs font-medium text-slate-700">
+    {children}
+  </span>
+);
+
+const Bullet: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <li className="flex gap-2">
+    <span aria-hidden>•</span>
+    <span>{children}</span>
+  </li>
+);
+
+/* =========================
+   Shared team credentials
+   ========================= */
 const TEAM_CREDENTIALS: string[] = [
   "High school diploma or GED",
   "STARS training — 30-hour initial; 10-hour annual",
@@ -119,34 +71,30 @@ const TEAM_CREDENTIALS: string[] = [
   "Hands-on training with children",
 ];
 
-const initials = (name: string) =>
-  name
-    .split(" ")
-    .map((n) => n[0])
-    .filter(Boolean)
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-
-
-
-const Pill: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <span className="inline-flex items-center rounded border border-slate-200 bg-white px-2.5 py-0.5 text-xs font-medium text-slate-700">
-    {children}
-  </span>
-);
-
-const Bullet: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <li className="flex gap-2">
-    <span aria-hidden>•</span>
-    <span>{children}</span>
-  </li>
-);
-
 /* =========================
    Page
    ========================= */
 const About: React.FC = () => {
+  // Pull all staff JSON files created by Netlify CMS at build time.
+  // NOTE: path is relative to THIS file. If this file is at src/pages/About.tsx,
+  // then "../content/staff/*.json" resolves to src/content/staff/*.json
+  const staff: Staff[] = useMemo(() => {
+    const modules = import.meta.glob("../content/staff/*.json", {
+      eager: true,
+      import: "default",
+    }) as Record<string, Staff>;
+
+    const list = Object.values(modules);
+
+    // Sort: order asc (undefined -> bottom), then name asc
+    return list.sort((a, b) => {
+      const ao = a.order ?? Number.POSITIVE_INFINITY;
+      const bo = b.order ?? Number.POSITIVE_INFINITY;
+      if (ao !== bo) return ao - bo;
+      return (a.name ?? "").localeCompare(b.name ?? "");
+    });
+  }, []);
+
   return (
     <Section className="bg-gradient-to-b from-slate-50 to-white">
       {/* SEO: ChildCare structured data */}
@@ -335,7 +283,7 @@ const About: React.FC = () => {
         </div>
       </Container>
 
-      {/* NEW: Team Credentials & Training */}
+      {/* Team Credentials & Training */}
       <Container className="py-10">
         <Card>
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Team Credentials & Training</h2>
@@ -350,7 +298,7 @@ const About: React.FC = () => {
         </Card>
       </Container>
 
-      {/* Meet the Staff */}
+      {/* Meet the Staff (from CMS) */}
       <Container className="py-10">
         <div className="mb-6 flex items-end justify-between gap-3">
           <div>
@@ -361,9 +309,16 @@ const About: React.FC = () => {
           </div>
         </div>
 
-        {/* Bigger photo + info to the right */}
         <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-2">
-          {STAFF.map((s) => (
+          {staff.length === 0 && (
+            <Card className="p-6">
+              <p className="text-sm text-slate-700">
+                Staff profiles are coming soon. Check back shortly!
+              </p>
+            </Card>
+          )}
+
+          {staff.map((s) => (
             <Card key={s.name} className="overflow-hidden p-0">
               <div className="flex flex-col sm:flex-row">
                 {/* Photo / Initials */}
@@ -372,7 +327,7 @@ const About: React.FC = () => {
                     <img
                       src={s.photo}
                       alt={`${s.name}, ${s.role}`}
-                      className="absolute inset-0 h-full w-full object-cover object-[50%_20%]" // or object-top
+                      className="absolute inset-0 h-full w-full object-cover object-[50%_20%]"
                       loading="lazy"
                       decoding="async"
                       width={512}
@@ -385,7 +340,6 @@ const About: React.FC = () => {
                   )}
                 </div>
 
-
                 {/* Details */}
                 <div className="flex-1 p-4 sm:p-6">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -397,12 +351,7 @@ const About: React.FC = () => {
 
                   <p className="mt-3 text-sm text-slate-700">{s.bio}</p>
 
-                  {/* badges removed so we don’t duplicate credentials */}
-                  {/* <div className="mt-4 flex flex-wrap gap-2">
-                    {s.badges.map((b) => (
-                      <Badge key={b}>{b}</Badge>
-                    ))}
-                  </div> */}
+                  {/* badges intentionally not rendered to avoid duplication with credentials */}
                 </div>
               </div>
             </Card>

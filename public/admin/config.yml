@@ -81,3 +81,24 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "string", required: false }
+
+
+
+
+#About.tsx Page for Staff
+  - name: "staff"
+    label: "Staff"
+    folder: "src/content/staff"
+    create: true
+    slug: "{{slug}}"
+    format: "json"
+    editor:
+      preview: false
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Role", name: "role", widget: "string" }
+      - { label: "Bio", name: "bio", widget: "text" }
+      - { label: "Photo", name: "photo", widget: "image", required: false, hint: "Uploads go to /uploads; value will be like /uploads/jane.jpg" }
+      - { label: "Sort Order", name: "order", widget: "number", value_type: "int", default: 0, hint: "Lower = appears first" }
+      # Optional: badges if you re-enable them later
+      - { label: "Badges", name: "badges", widget: "list", required: false }
