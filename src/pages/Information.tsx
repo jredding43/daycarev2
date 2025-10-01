@@ -19,6 +19,15 @@ type Closure = { title: string; start: string; end?: string; description?: strin
 type Document = { title: string; file: string; description?: string };
 type InfoItem = { title: string; description?: string };
 
+// NEW: Billing settings type
+type BillingSettings = {
+  enabled?: boolean;
+  threshold_hours?: number;
+  rate_under_or_equal?: number;
+  rate_over?: number;
+  notes?: string;
+};
+
 /** Helpers */
 const fmtUSD = (n?: number) =>
   typeof n === "number"
@@ -51,6 +60,24 @@ const programModules = import.meta.glob("/src/content/programs/*.json", { eager:
 const closureModules = import.meta.glob("/src/content/closures/*.json", { eager: true, import: "default" }) as Record<string, Closure>;
 const documentModules = import.meta.glob("/src/content/documents/*.json", { eager: true, import: "default" }) as Record<string, Document>;
 const infoModules = import.meta.glob("/src/content/information/*.json", { eager: true, import: "default" }) as Record<string, InfoItem>;
+
+// NEW: load singleton billing settings from Netlify CMS file
+const billingModules = import.meta.glob("/src/content/settings/billing.json", { eager: true, import: "default" }) as Record<string, BillingSettings>;
+const defaultBilling: Required<BillingSettings> = {
+  enabled: true,
+  threshold_hours: 4,
+  rate_under_or_equal: 30,
+  rate_over: 60,
+  notes: ""
+};
+const loadedBilling = Object.values(billingModules)[0] || {};
+const billing: Required<BillingSettings> = {
+  ...defaultBilling,
+  ...loadedBilling,
+  threshold_hours: Number(loadedBilling.threshold_hours ?? defaultBilling.threshold_hours),
+  rate_under_or_equal: Number(loadedBilling.rate_under_or_equal ?? defaultBilling.rate_under_or_equal),
+  rate_over: Number(loadedBilling.rate_over ?? defaultBilling.rate_over),
+};
 
 const programs: Program[] = Object.values(programModules);
 const closures: Closure[] = Object.values(closureModules);
@@ -99,6 +126,24 @@ const Information: React.FC = () => {
         </div>
       </section>
 
+      {/* ===== Brightwheel Billing Disclaimer (CMS-driven) ===== */}
+      {billing.enabled && (
+        <section className="mb-6">
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 shadow-sm">
+            <p>
+              <span className="font-semibold">Time-based daily billing:</span> Brightwheel tracks time from
+              clock-in to clock-out. Anything up to{" "}
+              <span className="font-semibold">{billing.threshold_hours}</span> hours is{" "}
+              <span className="font-semibold">{fmtUSD(billing.rate_under_or_equal)}</span> per day; anything over{" "}
+              <span className="font-semibold">{billing.threshold_hours}</span> hours is{" "}
+              <span className="font-semibold">{fmtUSD(billing.rate_over)}</span> per day. Before and after-school
+              pricing is reflected within this time-based structure.
+            </p>
+            {billing.notes && <p className="mt-1">{billing.notes}</p>}
+          </div>
+        </section>
+      )}
+
       {/* ===== Programs + Closures/Documents ===== */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Programs */}
@@ -115,35 +160,89 @@ const Information: React.FC = () => {
               const status = p.availability.status === "Openings" ? "Open" : p.availability.status;
               const max = p.availability.max_capacity ?? 0;
               const enrolled = p.availability.enrolled ?? 0;
-              const openSpots = typeof p.availability.open_spots === "number" ? p.availability.open_spots : Math.max(0, max - enrolled);
+              const openSpots =
+                typeof p.availability.open_spots === "number" ? p.availability.open_spots : Math.max(0, max - enrolled);
               const pct = capacityPct(enrolled, max);
               const meterTone = pct < 70 ? "bg-emerald-500" : pct < 95 ? "bg-amber-500" : "bg-rose-500";
 
               return (
-                <article key={p.title} className="group rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition hover:shadow-md" aria-label={`${p.title} program`}>
+                <article
+                  key={p.title}
+                  className="group rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm transition hover:shadow-md"
+                  aria-label={`${p.title} program`}
+                >
                   <div className="mb-3 flex items-center justify-between gap-3">
                     <h3 className="text-base font-semibold tracking-tight">{p.title}</h3>
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${badgeClass(status)}`}>
+                    <span
+                      className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${badgeClass(
+                        status
+                      )}`}
+                    >
                       {status}
                     </span>
                   </div>
 
                   <p className="mb-3 text-sm text-emerald-900/80">{p.description}</p>
 
-                  <div className="mb-3 grid grid-cols-2 gap-3 rounded-xl bg-emerald-50/50 p-3 ring-1 ring-emerald-100">
-                    <div className="flex items-center justify-between text-xs"><span className="text-emerald-900/70">Age Range</span><span className="font-medium">{p.age_range}</span></div>
-                    <div className="flex items-center justify-between text-xs"><span className="text-emerald-900/70">Ratio</span><span className="font-medium">{p.ratio}</span></div>
-                    <div className="flex items-center justify-between text-xs"><span className="text-emerald-900/70">Full-time</span><span className="font-medium">{fmtUSD(p.tuition.full_time)}</span></div>
-                    <div className="flex items-center justify-between text-xs"><span className="text-emerald-900/70">Part-time</span><span className="font-medium">{fmtUSD(p.tuition.part_time)}</span></div>
-                    <div className="col-span-2 flex items-center justify-between text-xs"><span className="text-emerald-900/70">Drop-in (day)</span><span className="font-medium">{fmtUSD(p.tuition.drop_in)}</span></div>
-                  </div>
+                  <div className="mb-3 rounded-xl bg-emerald-50/50 p-4 ring-1 ring-emerald-100">
+                  <dl className="space-y-3">
+                    <div>
+                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-emerald-900/60">Age Range</dt>
+                      <dd className="text-sm font-medium text-emerald-900">{p.age_range}</dd>
+                    </div>
+
+                    <div className="h-px bg-emerald-100" />
+
+                    <div>
+                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-emerald-900/60">Ratio</dt>
+                      <dd className="text-sm font-medium text-emerald-900">{p.ratio}</dd>
+                    </div>
+
+                    <div className="h-px bg-emerald-100" />
+
+                    <div>
+                      <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-emerald-900/60">Rates</dt>
+                      <ul className="space-y-2">
+                        <li className="flex items-baseline justify-between">
+                          <span className="text-sm text-emerald-900/80">Full-time</span>
+                          <span className="text-base font-semibold">{fmtUSD(p.tuition.full_time)}</span>
+                        </li>
+
+                        {/* Only render if provided */}
+                        {typeof p.tuition.part_time === "number" && (
+                          <li className="flex items-baseline justify-between">
+                            <span className="text-sm text-emerald-900/80">Part-time</span>
+                            <span className="text-base font-semibold">{fmtUSD(p.tuition.part_time)}</span>
+                          </li>
+                        )}
+
+                        {typeof p.tuition.drop_in === "number" && (
+                          <li className="flex items-baseline justify-between">
+                            <span className="text-sm text-emerald-900/80">Drop-in (day)</span>
+                            <span className="text-base font-semibold">{fmtUSD(p.tuition.drop_in)}</span>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                  </dl>
+                </div>
+
 
                   <div className="mb-1 flex items-center justify-between text-xs text-emerald-900/70">
                     <span>Capacity</span>
-                    <span>{enrolled}/{max} enrolled · {openSpots} open</span>
+                    <span>
+                      {enrolled}/{max} enrolled · {openSpots} open
+                    </span>
                   </div>
                   <div className="mb-3 h-2 w-full overflow-hidden rounded-full bg-emerald-100">
-                    <div className={`h-full ${meterTone} transition-[width]`} style={{ width: `${pct}%` }} role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} />
+                    <div
+                      className={`h-full ${meterTone} transition-[width]`}
+                      style={{ width: `${pct}%` }}
+                      role="progressbar"
+                      aria-valuenow={pct}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    />
                   </div>
 
                   {p.availability.next_opening && (
@@ -175,7 +274,10 @@ const Information: React.FC = () => {
                         {sortedClosures.upcoming.map((c) => (
                           <li key={`u-${c.title}`}>
                             <p className="text-sm font-medium">{c.title}</p>
-                            <p className="text-xs text-emerald-900/70">{fmtDate(c.start)}{c.end ? ` – ${fmtDate(c.end)}` : ""}</p>
+                            <p className="text-xs text-emerald-900/70">
+                              {fmtDate(c.start)}
+                              {c.end ? ` – ${fmtDate(c.end)}` : ""}
+                            </p>
                             {c.description && <p className="text-sm text-emerald-900/80">{c.description}</p>}
                           </li>
                         ))}
@@ -191,11 +293,16 @@ const Information: React.FC = () => {
                         {sortedClosures.past.slice(0, 8).map((c) => (
                           <li key={`p-${c.title}`}>
                             <p className="text-sm font-medium">{c.title}</p>
-                            <p className="text-xs text-emerald-900/70">{fmtDate(c.start)}{c.end ? ` – ${fmtDate(c.end)}` : ""}</p>
+                            <p className="text-xs text-emerald-900/70">
+                              {fmtDate(c.start)}
+                              {c.end ? ` – ${fmtDate(c.end)}` : ""}
+                            </p>
                             {c.description && <p className="text-sm text-emerald-900/80">{c.description}</p>}
                           </li>
                         ))}
-                        {sortedClosures.past.length > 8 && <li className="text-xs text-emerald-900/60">Showing latest 8…</li>}
+                        {sortedClosures.past.length > 8 && (
+                          <li className="text-xs text-emerald-900/60">Showing latest 8…</li>
+                        )}
                       </ul>
                     </details>
                   )}
@@ -220,7 +327,13 @@ const Information: React.FC = () => {
                       <div className="min-w-0">
                         <p className="truncate text-sm font-semibold">{d.title}</p>
                         {d.description && <p className="mt-0.5 text-xs text-emerald-900/70">{d.description}</p>}
-                        <a href={d.file} className="mt-1 inline-flex text-sm font-medium text-teal-700 hover:underline" target="_blank" rel="noopener noreferrer" aria-label={`Download ${d.title}`}>
+                        <a
+                          href={d.file}
+                          className="mt-1 inline-flex text-sm font-medium text-teal-700 hover:underline"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Download ${d.title}`}
+                        >
                           Download
                         </a>
                       </div>
@@ -233,7 +346,9 @@ const Information: React.FC = () => {
         </aside>
       </div>
 
-      <p className="mt-8 text-center text-xs text-emerald-900/50">Questions? Call, text, or email us—happy to help.</p>
+      <p className="mt-8 text-center text-xs text-emerald-900/50">
+        Questions? Call, text, or email us—happy to help.
+      </p>
     </section>
   );
 };
