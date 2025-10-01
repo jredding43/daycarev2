@@ -27,8 +27,8 @@ collections:
         widget: "object"
         fields:
           - { label: "Full Time", name: "full_time", widget: "number", value_type: "float", min: 0 }
-          - { label: "Part Time", name: "part_time", widget: "number", value_type: "float", required: false }
-          - { label: "Drop-in (daily)", name: "drop_in", widget: "number", value_type: "float", required: false }
+          - { label: "Drop-in (4 hrs or less)", name: "drop_in1", widget: "number", value_type: "float", required: false }
+          - { label: "Drop-in (4 hours or more)", name: "drop_in2", widget: "number", value_type: "float", required: false }
       - label: "Availability"
         name: "availability"
         widget: "object"
