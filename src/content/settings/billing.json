@@ -4,5 +4,5 @@
   "rate_under_or_equal": 30,
   "rate_over": 60,
   "notes": "",
-  "disclaimer": "Time-based daily billing: Brightwheel tracks time from clock-in to clock-out. Anything up to 4 hours is $30 per day; anything over 4 hours is $60 per day. Before and after-school pricing is reflected within this time-based structure."
+  "disclaimer": "Time-based daily billing: Brightwheel automatically tracks each child’s attendance based on their clock-in and clock-out times. Charges are calculated directly from this time log:\n\nAny day with up to 4 hours of care is billed at $30 per day.\n\nAny day with over 4 hours of care is billed at $60 per day.\n\nBrightwheel applies these rules automatically, generates the daily totals, and includes them in your monthly invoice. This means all billing is handled directly by Brightwheel’s system—staff do not adjust or override times. Before- and after-school care is included in this same time-based structure."
 }
