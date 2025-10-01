@@ -3,5 +3,6 @@
   "threshold_hours": 4,
   "rate_under_or_equal": 30,
   "rate_over": 60,
-  "notes": "Time-based daily billing: Brightwheel tracks time from clock-in to clock-out. Anything up to 4 hours is $30 per day; anything over 4 hours is $60 per day. Before and after-school pricing is reflected within this time-based structure."
+  "notes": "",
+  "disclaimer": "Time-based daily billing: Brightwheel tracks time from clock-in to clock-out. Anything up to 4 hours is $30 per day; anything over 4 hours is $60 per day. Before and after-school pricing is reflected within this time-based structure."
 }
