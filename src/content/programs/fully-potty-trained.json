@@ -8,11 +8,13 @@
   },
   "title": "Fully Potty Trained",
   "age_range": "36 - 60 months",
-  "description": "Now accepting Toddlers ages  36 - 60 months @ $47.09 / day\n\nFull @ $1079.98\nPart Time @ $30 per day (4 hours)\nDrop In @ 60 Per day",
+  "description": "Now accepting Toddlers ages  36 - 60 months @ $47.09 / day\n\nDrop in prices listed.\n",
   "ratio": "1:10",
   "tuition": {
     "full_time": 1079.98,
     "drop_in": 60,
-    "part_time": 30
+    "part_time": 30,
+    "drop_in1": 30,
+    "drop_in2": 60
   }
 }
