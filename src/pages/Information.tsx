@@ -6,7 +6,12 @@ type Program = {
   age_range: string;
   description: string;
   ratio: string;
-  tuition: { full_time: number; part_time?: number; drop_in?: number };
+  tuition: {
+    full_time: number;
+    // NEW drop-in tiers (match Netlify CMS schema)
+    drop_in1?: number; // ≤ threshold hours
+    drop_in2?: number; // > threshold hours
+  };
   availability: {
     status: string; // "Openings" | "Waitlist" | "Full" | etc.
     max_capacity: number;
@@ -19,7 +24,7 @@ type Closure = { title: string; start: string; end?: string; description?: strin
 type Document = { title: string; file: string; description?: string };
 type InfoItem = { title: string; description?: string };
 
-// NEW: Billing settings type
+// Billing settings type
 type BillingSettings = {
   enabled?: boolean;
   threshold_hours?: number;
@@ -57,21 +62,38 @@ const capacityPct = (enrolled: number, max: number) =>
   Math.max(0, Math.min(100, Math.round((enrolled / Math.max(1, max)) * 100)));
 
 /** Build-time content loading (no network calls): */
-const programModules = import.meta.glob("/src/content/programs/*.json", { eager: true, import: "default" }) as Record<string, Program>;
-const closureModules = import.meta.glob("/src/content/closures/*.json", { eager: true, import: "default" }) as Record<string, Closure>;
-const documentModules = import.meta.glob("/src/content/documents/*.json", { eager: true, import: "default" }) as Record<string, Document>;
-const infoModules = import.meta.glob("/src/content/information/*.json", { eager: true, import: "default" }) as Record<string, InfoItem>;
+const programModules = import.meta.glob("/src/content/programs/*.json", { eager: true, import: "default" }) as Record<
+  string,
+  Program
+>;
+const closureModules = import.meta.glob("/src/content/closures/*.json", { eager: true, import: "default" }) as Record<
+  string,
+  Closure
+>;
+const documentModules = import.meta.glob("/src/content/documents/*.json", { eager: true, import: "default" }) as Record<
+  string,
+  Document
+>;
+const infoModules = import.meta.glob("/src/content/information/*.json", { eager: true, import: "default" }) as Record<
+  string,
+  InfoItem
+>;
 
-// NEW: load singleton billing settings from Netlify CMS file
-const billingModules = import.meta.glob("/src/content/settings/billing.json", { eager: true, import: "default" }) as Record<string, BillingSettings>;
+// Billing (singleton)
+const billingModules = import.meta.glob("/src/content/settings/billing.json", {
+  eager: true,
+  import: "default",
+}) as Record<string, BillingSettings>;
+
 const defaultBilling: Required<BillingSettings> = {
   enabled: true,
   threshold_hours: 4,
   rate_under_or_equal: 30,
   rate_over: 60,
   disclaimer: "",
-  notes: ""
+  notes: "",
 };
+
 const loadedBilling = Object.values(billingModules)[0] || {};
 const billing: Required<BillingSettings> = {
   ...defaultBilling,
@@ -79,6 +101,7 @@ const billing: Required<BillingSettings> = {
   threshold_hours: Number(loadedBilling.threshold_hours ?? defaultBilling.threshold_hours),
   rate_under_or_equal: Number(loadedBilling.rate_under_or_equal ?? defaultBilling.rate_under_or_equal),
   rate_over: Number(loadedBilling.rate_over ?? defaultBilling.rate_over),
+  // disclaimer and notes are strings already; the spread above covers them
 };
 
 const programs: Program[] = Object.values(programModules);
@@ -103,9 +126,13 @@ const Information: React.FC = () => {
       {/* ===== Bulletin Board ===== */}
       <section aria-labelledby="bulletin-title" className="mb-10">
         <div className="mb-3 flex items-center justify-between">
-          <h2 id="bulletin-title" className="text-xl font-bold tracking-tight">Bulletin Board</h2>
+          <h2 id="bulletin-title" className="text-xl font-bold tracking-tight">
+            Bulletin Board
+          </h2>
           {infoItems.length > 0 && (
-            <span className="text-xs text-emerald-900/60">{infoItems.length} update{infoItems.length > 1 ? "s" : ""}</span>
+            <span className="text-xs text-emerald-900/60">
+              {infoItems.length} update{infoItems.length > 1 ? "s" : ""}
+            </span>
           )}
         </div>
 
@@ -128,7 +155,7 @@ const Information: React.FC = () => {
         </div>
       </section>
 
-      {/* ===== Brightwheel Billing Disclaimer (CMS-driven) ===== */}
+      {/* ===== Brightwheel Billing Disclaimer (from CMS) ===== */}
       {billing.enabled && billing.disclaimer && (
         <section className="mb-6">
           <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 shadow-sm">
@@ -179,48 +206,51 @@ const Information: React.FC = () => {
                   <p className="mb-3 text-sm text-emerald-900/80">{p.description}</p>
 
                   <div className="mb-3 rounded-xl bg-emerald-50/50 p-4 ring-1 ring-emerald-100">
-                  <dl className="space-y-3">
-                    <div>
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-emerald-900/60">Age Range</dt>
-                      <dd className="text-sm font-medium text-emerald-900">{p.age_range}</dd>
-                    </div>
+                    <dl className="space-y-3">
+                      <div>
+                        <dt className="text-[11px] font-semibold uppercase tracking-wide text-emerald-900/60">Age Range</dt>
+                        <dd className="text-sm font-medium text-emerald-900">{p.age_range}</dd>
+                      </div>
 
-                    <div className="h-px bg-emerald-100" />
+                      <div className="h-px bg-emerald-100" />
 
-                    <div>
-                      <dt className="text-[11px] font-semibold uppercase tracking-wide text-emerald-900/60">Ratio</dt>
-                      <dd className="text-sm font-medium text-emerald-900">{p.ratio}</dd>
-                    </div>
+                      <div>
+                        <dt className="text-[11px] font-semibold uppercase tracking-wide text-emerald-900/60">Ratio</dt>
+                        <dd className="text-sm font-medium text-emerald-900">{p.ratio}</dd>
+                      </div>
 
-                    <div className="h-px bg-emerald-100" />
+                      <div className="h-px bg-emerald-100" />
 
-                    <div>
-                      <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-emerald-900/60">Rates</dt>
-                      <ul className="space-y-2">
-                        <li className="flex items-baseline justify-between">
-                          <span className="text-sm text-emerald-900/80">Full-time</span>
-                          <span className="text-base font-semibold">{fmtUSD(p.tuition.full_time)}</span>
-                        </li>
-
-                        {/* Only render if provided */}
-                        {typeof p.tuition.part_time === "number" && (
+                      <div>
+                        <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-emerald-900/60">Rates</dt>
+                        <ul className="space-y-2">
                           <li className="flex items-baseline justify-between">
-                            <span className="text-sm text-emerald-900/80">Part-time</span>
-                            <span className="text-base font-semibold">{fmtUSD(p.tuition.part_time)}</span>
+                            <span className="text-sm text-emerald-900/80">Full-time</span>
+                            <span className="text-base font-semibold">{fmtUSD(p.tuition.full_time)}</span>
                           </li>
-                        )}
 
-                        {typeof p.tuition.drop_in === "number" && (
-                          <li className="flex items-baseline justify-between">
-                            <span className="text-sm text-emerald-900/80">Drop-in (day)</span>
-                            <span className="text-base font-semibold">{fmtUSD(p.tuition.drop_in)}</span>
-                          </li>
-                        )}
-                      </ul>
-                    </div>
-                  </dl>
-                </div>
+                          {/* Only render if provided */}
+                          {typeof p.tuition.drop_in1 === "number" && (
+                            <li className="flex items-baseline justify-between">
+                              <span className="text-sm text-emerald-900/80">
+                                Drop-in (≤ {billing.threshold_hours} hrs)
+                              </span>
+                              <span className="text-base font-semibold">{fmtUSD(p.tuition.drop_in1)}</span>
+                            </li>
+                          )}
 
+                          {typeof p.tuition.drop_in2 === "number" && (
+                            <li className="flex items-baseline justify-between">
+                              <span className="text-sm text-emerald-900/80">
+                                Drop-in (&gt; {billing.threshold_hours} hrs)
+                              </span>
+                              <span className="text-base font-semibold">{fmtUSD(p.tuition.drop_in2)}</span>
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    </dl>
+                  </div>
 
                   <div className="mb-1 flex items-center justify-between text-xs text-emerald-900/70">
                     <span>Capacity</span>
@@ -294,9 +324,7 @@ const Information: React.FC = () => {
                             {c.description && <p className="text-sm text-emerald-900/80">{c.description}</p>}
                           </li>
                         ))}
-                        {sortedClosures.past.length > 8 && (
-                          <li className="text-xs text-emerald-900/60">Showing latest 8…</li>
-                        )}
+                        {sortedClosures.past.length > 8 && <li className="text-xs text-emerald-900/60">Showing latest 8…</li>}
                       </ul>
                     </details>
                   )}
@@ -340,9 +368,7 @@ const Information: React.FC = () => {
         </aside>
       </div>
 
-      <p className="mt-8 text-center text-xs text-emerald-900/50">
-        Questions? Call, text, or email us—happy to help.
-      </p>
+      <p className="mt-8 text-center text-xs text-emerald-900/50">Questions? Call, text, or email us—happy to help.</p>
     </section>
   );
 };
