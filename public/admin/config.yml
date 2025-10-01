@@ -36,7 +36,6 @@ collections:
           - { label: "Status", name: "status", widget: "select", options: ["Openings", "Waitlist", "Full"], default: "Waitlist" }
           - { label: "Max Capacity", name: "max_capacity", widget: "number", value_type: "int", min: 0, default: 0, hint: "Maximum number of kids allowed in this program" }
           - { label: "Kids Enrolled", name: "enrolled", widget: "number", value_type: "int", min: 0, default: 0 }
-          # CMS can't compute fields; keep optional. UI will compute if omitted.
           - { label: "Open Spots (optional)", name: "open_spots", widget: "number", value_type: "int", required: false, min: 0 }
           - { label: "Next Opening", name: "next_opening", widget: "datetime", required: false, date_format: "YYYY-MM-DD", time_format: false }
 
@@ -55,25 +54,22 @@ collections:
       - { label: "End Date", name: "end", widget: "datetime", required: false, date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Description", name: "description", widget: "text", required: false }
 
-# Site-wide Settings (singleton files)
--name: "settings"
-label: "Site Settings"
-files:
-  - label: "Billing & Attendance"
-    name: "billing"
-    file: "src/content/settings/billing.json"
-    format: "json"
-    editor:
-      preview: false
-    fields:
-      - { label: "Enable Brightwheel Disclaimer", name: "enabled", widget: "boolean", default: true }
-      - { label: "Hourly Threshold (hours)", name: "threshold_hours", widget: "number", value_type: "float", min: 0, step: 0.25, default: 4 }
-      - { label: "Rate up to Threshold (per day)", name: "rate_under_or_equal", widget: "number", value_type: "float", min: 0, default: 30 }
-      - { label: "Rate over Threshold (per day)", name: "rate_over", widget: "number", value_type: "float", min: 0, default: 60 }
-      - { label: "Extra Notes (optional)", name: "notes", widget: "text", required: false, hint: "E.g., 'Before/after-school follows the same time-based pricing.'" }
-
-
-
+  # Site-wide Settings (singleton files)
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - label: "Billing & Attendance"
+        name: "billing"
+        file: "src/content/settings/billing.json"
+        format: "json"
+        editor:
+          preview: false
+        fields:
+          - { label: "Enable Brightwheel Disclaimer", name: "enabled", widget: "boolean", default: true }
+          - { label: "Hourly Threshold (hours)", name: "threshold_hours", widget: "number", value_type: "float", min: 0, step: 0.25, default: 4 }
+          - { label: "Rate up to Threshold (per day)", name: "rate_under_or_equal", widget: "number", value_type: "float", min: 0, default: 30 }
+          - { label: "Rate over Threshold (per day)", name: "rate_over", widget: "number", value_type: "float", min: 0, default: 60 }
+          - { label: "Extra Notes (optional)", name: "notes", widget: "text", required: false, hint: "E.g., 'Before/after-school follows the same time-based pricing.'" }
 
   # Documents Collection
   - name: "documents"
@@ -102,10 +98,7 @@ files:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "string", required: false }
 
-
-
-
-#About.tsx Page for Staff
+  # Staff Collection
   - name: "staff"
     label: "Staff"
     folder: "src/content/staff"
@@ -120,5 +113,4 @@ files:
       - { label: "Bio", name: "bio", widget: "text" }
       - { label: "Photo", name: "photo", widget: "image", required: false, hint: "Uploads go to /uploads; value will be like /uploads/jane.jpg" }
       - { label: "Sort Order", name: "order", widget: "number", value_type: "int", default: 0, hint: "Lower = appears first" }
-      # Optional: badges if you re-enable them later
       - { label: "Badges", name: "badges", widget: "list", required: false }
