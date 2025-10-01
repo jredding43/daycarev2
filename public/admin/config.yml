@@ -70,6 +70,8 @@ collections:
           - { label: "Rate up to Threshold (per day)", name: "rate_under_or_equal", widget: "number", value_type: "float", min: 0, default: 30 }
           - { label: "Rate over Threshold (per day)", name: "rate_over", widget: "number", value_type: "float", min: 0, default: 60 }
           - { label: "Extra Notes (optional)", name: "notes", widget: "text", required: false, hint: "E.g., 'Before/after-school follows the same time-based pricing.'" }
+          - { label: "Disclaimer", name: "disclaimer", widget: "text", required: true, hint: "Shown above Programs" }
+
 
   # Documents Collection
   - name: "documents"
