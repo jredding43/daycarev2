@@ -25,6 +25,7 @@ type BillingSettings = {
   threshold_hours?: number;
   rate_under_or_equal?: number;
   rate_over?: number;
+  disclaimer?: string;
   notes?: string;
 };
 
@@ -68,6 +69,7 @@ const defaultBilling: Required<BillingSettings> = {
   threshold_hours: 4,
   rate_under_or_equal: 30,
   rate_over: 60,
+  disclaimer: "",
   notes: ""
 };
 const loadedBilling = Object.values(billingModules)[0] || {};
@@ -127,19 +129,11 @@ const Information: React.FC = () => {
       </section>
 
       {/* ===== Brightwheel Billing Disclaimer (CMS-driven) ===== */}
-      {billing.enabled && (
+      {billing.enabled && billing.disclaimer && (
         <section className="mb-6">
           <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 shadow-sm">
-            <p>
-              <span className="font-semibold">Time-based daily billing:</span> Brightwheel tracks time from
-              clock-in to clock-out. Anything up to{" "}
-              <span className="font-semibold">{billing.threshold_hours}</span> hours is{" "}
-              <span className="font-semibold">{fmtUSD(billing.rate_under_or_equal)}</span> per day; anything over{" "}
-              <span className="font-semibold">{billing.threshold_hours}</span> hours is{" "}
-              <span className="font-semibold">{fmtUSD(billing.rate_over)}</span> per day. Before and after-school
-              pricing is reflected within this time-based structure.
-            </p>
-            {billing.notes && <p className="mt-1">{billing.notes}</p>}
+            <p className="whitespace-pre-line">{billing.disclaimer}</p>
+            {billing.notes && <p className="mt-1 whitespace-pre-line">{billing.notes}</p>}
           </div>
         </section>
       )}
